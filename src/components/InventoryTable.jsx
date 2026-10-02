@@ -14,6 +14,10 @@ export default function InventoryTable() {
   const [category, setCategory] = useState("");
   const [stockSlider, setStockSlider] = useState(500);
   const [stockLimit, setStockLimit] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState("");
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -24,10 +28,25 @@ export default function InventoryTable() {
   }, [search]);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedMinPrice(minPrice);
+      setDebouncedMaxPrice(maxPrice);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [minPrice, maxPrice]);
+
+  useEffect(() => {
     // The filtered result set always starts at its first page.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
-  }, [debouncedSearch, category, stockLimit]);
+  }, [
+    debouncedSearch,
+    category,
+    stockLimit,
+    debouncedMinPrice,
+    debouncedMaxPrice,
+  ]);
 
   useEffect(() => {
     async function fetchInventory() {
@@ -52,6 +71,14 @@ export default function InventoryTable() {
           params.set("maxStock", stockLimit);
         }
 
+        if (debouncedMinPrice !== "") {
+          params.set("minPrice", debouncedMinPrice);
+        }
+
+        if (debouncedMaxPrice !== "") {
+          params.set("maxPrice", debouncedMaxPrice);
+        }
+
         const response = await fetch(`/api/inventory?${params.toString()}`);
 
         if (!response.ok) {
@@ -70,7 +97,14 @@ export default function InventoryTable() {
     }
 
     fetchInventory();
-  }, [page, debouncedSearch, category, stockLimit]);
+  }, [
+    page,
+    debouncedSearch,
+    category,
+    stockLimit,
+    debouncedMinPrice,
+    debouncedMaxPrice,
+  ]);
 
   const goToPreviousPage = () => {
     setPage((current) => Math.max(current - 1, 1));
@@ -177,6 +211,46 @@ export default function InventoryTable() {
               }}
               className="w-full"
             />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="min-price"
+                className="mb-2 block text-sm font-medium text-zinc-900"
+              >
+                Minimum price
+              </label>
+
+              <input
+                id="min-price"
+                type="number"
+                min="0"
+                placeholder="Any"
+                value={minPrice}
+                onChange={(event) => setMinPrice(event.target.value)}
+                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="max-price"
+                className="mb-2 block text-sm font-medium text-zinc-900"
+              >
+                Maximum price
+              </label>
+
+              <input
+                id="max-price"
+                type="number"
+                min="0"
+                placeholder="Any"
+                value={maxPrice}
+                onChange={(event) => setMaxPrice(event.target.value)}
+                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500"
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -65,3 +65,9 @@ I'm unable to drag the slider. I can just click at various points on the slider 
 
 ## 20.
 The slider drag is working now, but the displayed <= value only changes after I let go of the slider. Can we make that number update while im dragging, without making the api request on every movement?
+
+## 21.
+The stock filter is working now. I want to add the price range filter next, with a minimum and maximum price, and send those values to the minPrice and maxPrice parameters that the api already supports. Also make sure changing either price resets the table back to page 1.
+
+## 22.
+25. The price state is connected to the api now. Can we add simple minimum and maximum price inputs to the filter area so I can actually use them? Keep the inputs pretty basic for now.

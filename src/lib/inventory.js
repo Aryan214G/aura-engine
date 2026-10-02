@@ -12,7 +12,7 @@ const categories = [
 function generateProduct(index) {
   const category = categories[index % categories.length];
 
-  const price = Number((10 + ((index * 37) % 2000) + Math.random() * 100).toFixed(2));
+  const price = Number((10 + ((index * 37) % 2000)).toFixed(2));
   const cost = Number((price * (0.5 + ((index % 20) / 100))).toFixed(2));
 
   return {

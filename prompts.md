@@ -23,3 +23,30 @@ The basic inventory endpoint is working. I now need to handle the search, catego
 ## 6.
 
 I'm testing /api/inventory?search=Electronics and i'm getting an empty result even though there are Electronics products in my generated data. Can you help me figure out whats wrong with the current filtering logic? I also want to make sure the sorting isnt modifying the original inventory data.
+
+## 7.
+The api is working now and im able to get 50 products at a time. Can we make the inventory table look a bit more like an actual enterprise dashboard instead of just a basic html table? Keep it simple for now, we'll add the filters later.
+
+## 8.
+The pagination is working but I want to make sure the page controls are proper and easy to use. Can we improve the pagination UI and make sure the next and previous buttons are disabled when they should be?
+
+## 9.
+Now I need to add the global search from the sprint requirements. I want an Omnisearch input that searches the inventory through the api, but it should wait around 500ms after I stop typing before making the request. I dont want a request for every key press.
+
+## 10.
+The search is working with the api now. Can we make sure changing the search resets the table back to page 1? Otherwise I think it could end up showing an empty page if the new search has fewer results.
+
+## 11.
+I also need the category filter from the requirements. Can we add a category dropdown and connect it to the existing inventory api without changing the pagination logic?
+
+## 12.
+Can we add the stock level filter next? The requirement says something like showing products with stock below 20, so I want a slider for the max stock value and have it update the inventory results.
+
+## 13.
+I need a price range filter too. Whats a simple way to add a minimum and maximum price filter to the table and send those values to the api?
+
+## 14.
+The filters are starting to work now. Can we make sure search, category, stock and price filters can be used together and that the pagination still works correctly when multiple filters are active?
+
+## 15.
+I need sortable columns for the inventory table. Can we add sorting for things like price and stock and use the sorting options that we already added to the api? I'd like clicking the column to change the sort direction.

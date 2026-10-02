@@ -37,64 +37,117 @@ export default function InventoryTable() {
     fetchInventory();
   }, [page]);
 
+  const goToPreviousPage = () => {
+    setPage((current) => Math.max(current - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setPage((current) =>
+      Math.min(current + 1, pagination?.totalPages ?? current)
+    );
+  };
+
   if (loading) {
-    return <p>Loading inventory...</p>;
+    return (
+      <div className="rounded-lg border bg-white p-8 text-center">
+        Loading inventory...
+      </div>
+    );
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-red-700">
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="border-b text-left">
-              <th className="p-3">Product</th>
-              <th className="p-3">SKU</th>
-              <th className="p-3">Category</th>
-              <th className="p-3">Price</th>
-              <th className="p-3">Stock</th>
-              <th className="p-3">Reorder Level</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id} className="border-b">
-                <td className="p-3">{product.productName}</td>
-                <td className="p-3">{product.sku}</td>
-                <td className="p-3">{product.category}</td>
-                <td className="p-3">${product.price.toFixed(2)}</td>
-                <td className="p-3">{product.stockQuantity}</td>
-                <td className="p-3">{product.reorderLevel}</td>
+    <div className="space-y-4">
+      <div className="overflow-hidden rounded-lg border bg-white">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[900px] text-sm text-zinc-900">
+            <thead className="sticky top-0 bg-zinc-100 text-zinc-900">
+              <tr className="border-b text-left">
+                <th className="px-4 py-3 font-medium">Product</th>
+                <th className="px-4 py-3 font-medium">SKU</th>
+                <th className="px-4 py-3 font-medium">Category</th>
+                <th className="px-4 py-3 text-right font-medium">Price</th>
+                <th className="px-4 py-3 text-right font-medium">Stock</th>
+                <th className="px-4 py-3 text-right font-medium">
+                  Reorder Level
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {products.map((product) => (
+                <tr
+                  key={product.id}
+                  className="border-b last:border-b-0 hover:bg-zinc-50"
+                >
+                  <td className="px-4 py-3 font-medium">
+                    {product.productName}
+                  </td>
+
+                  <td className="px-4 py-3 text-zinc-600">
+                    {product.sku}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs">
+                      {product.category}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-right">
+                    ${product.price.toFixed(2)}
+                  </td>
+
+                  <td className="px-4 py-3 text-right">
+                    {product.stockQuantity}
+                  </td>
+
+                  <td className="px-4 py-3 text-right">
+                    {product.reorderLevel}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
-        <button
-          onClick={() => setPage((current) => current - 1)}
-          disabled={page === 1}
-          className="rounded border px-4 py-2 disabled:opacity-50"
-        >
-          Previous
-        </button>
+      <div className="flex items-center justify-between rounded-lg border bg-white px-4 py-3">
+        <p className="text-sm text-zinc-600">
+          Showing {(page - 1) * 50 + 1}–
+          {Math.min(page * 50, pagination?.total ?? 0)} of{" "}
+          {pagination?.total ?? 0} products
+        </p>
 
-        <span>
-          Page {pagination?.page} of {pagination?.totalPages}
-        </span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={goToPreviousPage}
+            disabled={page === 1}
+            className="rounded-md border px-3 py-2 text-sm font-medium transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Previous
+          </button>
 
-        <button
-          onClick={() => setPage((current) => current + 1)}
-          disabled={page === pagination?.totalPages}
-          className="rounded border px-4 py-2 disabled:opacity-50"
-        >
-          Next
-        </button>
+          <span className="text-sm text-zinc-600">
+            Page <span className="font-medium text-zinc-900">{page}</span>{" "}
+            of {pagination?.totalPages}
+          </span>
+
+          <button
+            onClick={goToNextPage}
+            disabled={page === pagination?.totalPages}
+            className="rounded-md border px-3 py-2 text-sm font-medium transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

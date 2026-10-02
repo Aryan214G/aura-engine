@@ -12,6 +12,7 @@ export default function InventoryTable() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [stockSlider, setStockSlider] = useState(500);
   const [stockLimit, setStockLimit] = useState("");
 
   useEffect(() => {
@@ -153,7 +154,7 @@ export default function InventoryTable() {
               </label>
 
               <span className="text-sm text-zinc-600">
-                {stockLimit === "" ? "Any" : `≤ ${stockLimit}`}
+                {stockSlider === 500 ? "Any" : `≤ ${stockSlider}`}
               </span>
             </div>
 
@@ -162,15 +163,16 @@ export default function InventoryTable() {
               type="range"
               min="0"
               max="500"
-              step="10"
-              value={stockLimit === "" ? 500 : stockLimit}
+              step="1"
+              value={stockSlider}
               onChange={(event) => {
-                const value = Number(event.target.value);
-
-                if (value === 500) {
+                setStockSlider(Number(event.target.value));
+              }}
+              onMouseUp={() => {
+                if (stockSlider === 500) {
                   setStockLimit("");
                 } else {
-                  setStockLimit(String(value));
+                  setStockLimit(String(stockSlider));
                 }
               }}
               className="w-full"

@@ -62,3 +62,6 @@ The category filter is working. Next I need the stock level filter from the requ
 
 ## 19.
 I'm unable to drag the slider. I can just click at various points on the slider bar to set a value. If I try to drag it, it gets stuck at the next point.
+
+## 20.
+The slider drag is working now, but the displayed <= value only changes after I let go of the slider. Can we make that number update while im dragging, without making the api request on every movement?

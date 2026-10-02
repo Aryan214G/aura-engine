@@ -113,7 +113,8 @@ export default function AnalyticsDashboard() {
               <YAxis
                 type="category"
                 dataKey="productName"
-                width={160}
+                width={150}
+                tick={{ fontSize: 12 }}
               />
 
               <Tooltip />

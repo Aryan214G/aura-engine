@@ -22,7 +22,10 @@ function generateProduct(index) {
     category,
     price,
     cost,
-    stockQuantity: (index * 17) % 500,
+    stockQuantity:
+      index % 5000 === 0
+        ? (index / 5000) * 4
+        : 40 + ((index * 17) % 460),
     reorderLevel: 20 + (index % 50),
     lastUpdated: new Date(
       Date.now() - (index % 30) * 24 * 60 * 60 * 1000

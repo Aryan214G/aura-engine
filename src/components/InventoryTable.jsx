@@ -12,6 +12,7 @@ export default function InventoryTable() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [stockLimit, setStockLimit] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,7 +26,7 @@ export default function InventoryTable() {
     // The filtered result set always starts at its first page.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
-  }, [debouncedSearch, category]);
+  }, [debouncedSearch, category, stockLimit]);
 
   useEffect(() => {
     async function fetchInventory() {
@@ -46,6 +47,10 @@ export default function InventoryTable() {
           params.set("category", category);
         }
 
+        if (stockLimit !== "") {
+          params.set("maxStock", stockLimit);
+        }
+
         const response = await fetch(`/api/inventory?${params.toString()}`);
 
         if (!response.ok) {
@@ -64,7 +69,7 @@ export default function InventoryTable() {
     }
 
     fetchInventory();
-  }, [page, debouncedSearch, category]);
+  }, [page, debouncedSearch, category, stockLimit]);
 
   const goToPreviousPage = () => {
     setPage((current) => Math.max(current - 1, 1));
@@ -95,7 +100,7 @@ export default function InventoryTable() {
   return (
     <div className="space-y-4">
       <div className="rounded-lg border bg-white p-4">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <label
               htmlFor="inventory-search"
@@ -136,6 +141,40 @@ export default function InventoryTable() {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <label
+                htmlFor="stock-filter"
+                className="text-sm font-medium text-zinc-900"
+              >
+                Maximum stock
+              </label>
+
+              <span className="text-sm text-zinc-600">
+                {stockLimit === "" ? "Any" : `≤ ${stockLimit}`}
+              </span>
+            </div>
+
+            <input
+              id="stock-filter"
+              type="range"
+              min="0"
+              max="500"
+              step="10"
+              value={stockLimit === "" ? 500 : stockLimit}
+              onChange={(event) => {
+                const value = Number(event.target.value);
+
+                if (value === 500) {
+                  setStockLimit("");
+                } else {
+                  setStockLimit(String(value));
+                }
+              }}
+              className="w-full"
+            />
           </div>
         </div>
       </div>

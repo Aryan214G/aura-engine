@@ -56,3 +56,9 @@ I need to add the Omnisearch now. The api already supports the search parameter,
 
 ## 17.
 The search is working. I want to add the category filter now using the categories from the inventory data. Can we add a dropdown for it and send the selected category to the api? Also make sure changing the category takes me back to page 1.
+
+## 18.
+The category filter is working. Next I need the stock level filter from the requirements. Can we add a slider for the maximum stock quantity and connect it to the maxStock parameter we already have in the api? It should also reset the page when I change it.
+
+## 19.
+I'm unable to drag the slider. I can just click at various points on the slider bar to set a value. If I try to drag it, it gets stuck at the next point.

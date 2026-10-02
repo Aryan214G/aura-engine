@@ -1,3 +1,4 @@
+import AnalyticsDashboard from "@/components/AnalyticsDashboard";
 import InventoryTable from "@/components/InventoryTable";
 
 export default function Home() {
@@ -6,6 +7,8 @@ export default function Home() {
       <h1 className="mb-6 text-3xl font-semibold">
         Aura Engine
       </h1>
+
+      <AnalyticsDashboard />
 
       <InventoryTable />
     </main>

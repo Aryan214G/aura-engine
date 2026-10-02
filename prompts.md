@@ -80,3 +80,12 @@ The price sorting is working. Can we do the same thing for the Stock column, wit
 
 ## 25.
 The inventory table is basically done now. I need to start the analytics dashboard from the sprint requirements, using Recharts for the charts. Can we install it first and then build the dashboard separately from the table?
+
+## 26.
+Recharts is installed. Before making the actual charts, I want an analytics api that calculates the dashboard data from the 50k products on the server instead of sending all that data to the browser. I need total skus, total inventory value, out of stock items, the 10 lowest stock products and inventory value grouped by category.
+
+## 27.
+The KPI cards are working. Can we add the first chart now using Recharts, showing the 10 products with the lowest stock as a horizontal bar chart? The api already gives us those 10 products.
+
+## 28.
+The lowest stock bar chart is working. Can we add the second chart now, a pie chart showing the inventory value split by category using the data from the analytics api?

@@ -18,6 +18,7 @@ export default function InventoryTable() {
   const [maxPrice, setMaxPrice] = useState("");
   const [debouncedMinPrice, setDebouncedMinPrice] = useState("");
   const [debouncedMaxPrice, setDebouncedMaxPrice] = useState("");
+  const [sort, setSort] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -46,6 +47,7 @@ export default function InventoryTable() {
     stockLimit,
     debouncedMinPrice,
     debouncedMaxPrice,
+    sort,
   ]);
 
   useEffect(() => {
@@ -79,6 +81,10 @@ export default function InventoryTable() {
           params.set("maxPrice", debouncedMaxPrice);
         }
 
+        if (sort) {
+          params.set("sort", sort);
+        }
+
         const response = await fetch(`/api/inventory?${params.toString()}`);
 
         if (!response.ok) {
@@ -104,6 +110,7 @@ export default function InventoryTable() {
     stockLimit,
     debouncedMinPrice,
     debouncedMaxPrice,
+    sort,
   ]);
 
   const goToPreviousPage = () => {
@@ -263,7 +270,25 @@ export default function InventoryTable() {
                 <th className="px-4 py-3 font-medium">Product</th>
                 <th className="px-4 py-3 font-medium">SKU</th>
                 <th className="px-4 py-3 font-medium">Category</th>
-                <th className="px-4 py-3 text-right font-medium">Price</th>
+                <th className="px-4 py-3 text-right">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (sort === "price-asc") {
+                        setSort("price-desc");
+                      } else if (sort === "price-desc") {
+                        setSort("");
+                      } else {
+                        setSort("price-asc");
+                      }
+                    }}
+                    className="font-semibold hover:underline"
+                  >
+                    Price
+                    {sort === "price-asc" && " ↑"}
+                    {sort === "price-desc" && " ↓"}
+                  </button>
+                </th>
                 <th className="px-4 py-3 text-right font-medium">Stock</th>
                 <th className="px-4 py-3 text-right font-medium">
                   Reorder Level

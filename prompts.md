@@ -71,3 +71,6 @@ The stock filter is working now. I want to add the price range filter next, with
 
 ## 22.
 25. The price state is connected to the api now. Can we add simple minimum and maximum price inputs to the filter area so I can actually use them? Keep the inputs pretty basic for now.
+
+## 23.
+The filters are working together now. I want to connect the sorting that we already have in the api to the table next. Can we add a sort state and send it as a query parameter, and make sure changing the sort goes back to page 1?

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { categories } from "@/lib/inventory";
 
 export default function InventoryTable() {
   const [products, setProducts] = useState([]);
@@ -10,6 +11,7 @@ export default function InventoryTable() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -20,8 +22,10 @@ export default function InventoryTable() {
   }, [search]);
 
   useEffect(() => {
+    // The filtered result set always starts at its first page.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, category]);
 
   useEffect(() => {
     async function fetchInventory() {
@@ -36,6 +40,10 @@ export default function InventoryTable() {
 
         if (debouncedSearch) {
           params.set("search", debouncedSearch);
+        }
+
+        if (category) {
+          params.set("category", category);
         }
 
         const response = await fetch(`/api/inventory?${params.toString()}`);
@@ -56,7 +64,7 @@ export default function InventoryTable() {
     }
 
     fetchInventory();
-  }, [page, debouncedSearch]);
+  }, [page, debouncedSearch, category]);
 
   const goToPreviousPage = () => {
     setPage((current) => Math.max(current - 1, 1));
@@ -87,21 +95,49 @@ export default function InventoryTable() {
   return (
     <div className="space-y-4">
       <div className="rounded-lg border bg-white p-4">
-        <label
-          htmlFor="inventory-search"
-          className="mb-2 block text-sm font-medium text-zinc-900"
-        >
-          Search inventory
-        </label>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label
+              htmlFor="inventory-search"
+              className="mb-2 block text-sm font-medium text-zinc-900"
+            >
+              Search inventory
+            </label>
 
-        <input
-          id="inventory-search"
-          type="search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by product, SKU or category..."
-          className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-zinc-500 focus:ring-2 focus:ring-zinc-200"
-        />
+            <input
+              id="inventory-search"
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search by product, SKU or category..."
+              className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-zinc-500 focus:ring-2 focus:ring-zinc-200"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="category-filter"
+              className="mb-2 block text-sm font-medium text-zinc-900"
+            >
+              Category
+            </label>
+
+            <select
+              id="category-filter"
+              value={category}
+              onChange={(event) => setCategory(event.target.value)}
+              className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-200"
+            >
+              <option value="">All categories</option>
+
+              {categories.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-lg border bg-white">

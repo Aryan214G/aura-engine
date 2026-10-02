@@ -53,3 +53,6 @@ I need sortable columns for the inventory table. Can we add sorting for things l
 
 ## 16.
 I need to add the Omnisearch now. The api already supports the search parameter, but I dont want it making a request every time I type a letter. Can we add a 500ms debounce to the search input and also reset the page back to 1 when the search changes?
+
+## 17.
+The search is working. I want to add the category filter now using the categories from the inventory data. Can we add a dropdown for it and send the selected category to the api? Also make sure changing the category takes me back to page 1.

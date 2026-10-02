@@ -50,3 +50,6 @@ The filters are starting to work now. Can we make sure search, category, stock a
 
 ## 15.
 I need sortable columns for the inventory table. Can we add sorting for things like price and stock and use the sorting options that we already added to the api? I'd like clicking the column to change the sort direction.
+
+## 16.
+I need to add the Omnisearch now. The api already supports the search parameter, but I dont want it making a request every time I type a letter. Can we add a 500ms debounce to the search input and also reset the page back to 1 when the search changes?

@@ -289,7 +289,25 @@ export default function InventoryTable() {
                     {sort === "price-desc" && " ↓"}
                   </button>
                 </th>
-                <th className="px-4 py-3 text-right font-medium">Stock</th>
+                <th className="px-4 py-3 text-right">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (sort === "stock-asc") {
+                        setSort("stock-desc");
+                      } else if (sort === "stock-desc") {
+                        setSort("");
+                      } else {
+                        setSort("stock-asc");
+                      }
+                    }}
+                    className="font-semibold hover:underline"
+                  >
+                    Stock
+                    {sort === "stock-asc" && " ↑"}
+                    {sort === "stock-desc" && " ↓"}
+                  </button>
+                </th>
                 <th className="px-4 py-3 text-right font-medium">
                   Reorder Level
                 </th>

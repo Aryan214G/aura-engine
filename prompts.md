@@ -74,3 +74,9 @@ The stock filter is working now. I want to add the price range filter next, with
 
 ## 23.
 The filters are working together now. I want to connect the sorting that we already have in the api to the table next. Can we add a sort state and send it as a query parameter, and make sure changing the sort goes back to page 1?
+
+## 24.
+The price sorting is working. Can we do the same thing for the Stock column, with lowest to highest, highest to lowest, and then clearing the sort on the third click?
+
+## 25.
+The inventory table is basically done now. I need to start the analytics dashboard from the sprint requirements, using Recharts for the charts. Can we install it first and then build the dashboard separately from the table?

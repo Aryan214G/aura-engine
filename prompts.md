@@ -89,3 +89,6 @@ The KPI cards are working. Can we add the first chart now using Recharts, showin
 
 ## 28.
 The lowest stock bar chart is working. Can we add the second chart now, a pie chart showing the inventory value split by category using the data from the analytics api?
+
+## 29.
+The analytics part is done. I need the Export to CSV requirement next, using whatever filters are currently active. Can we add the export button to the inventory controls first and then wire up the actual download?

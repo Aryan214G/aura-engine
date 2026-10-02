@@ -17,10 +17,10 @@ export async function GET(request) {
     const maxPrice = maxPriceParam !== null ? Number(maxPriceParam) : null;
     const maxStock = maxStockParam !== null ? Number(maxStockParam) : null;
     const sort = searchParams.get("sort") || "";
+    const exportData = searchParams.get("export") === "true";
 
     let filteredInventory = [...inventory];
 
-    // Global search
     if (search) {
         filteredInventory = filteredInventory.filter(
             (product) =>
@@ -30,14 +30,12 @@ export async function GET(request) {
         );
     }
 
-    // Category filter
     if (category) {
         filteredInventory = filteredInventory.filter(
             (product) => product.category === category
         );
     }
 
-    // Price range
     if (minPrice !== null && !Number.isNaN(minPrice)) {
         filteredInventory = filteredInventory.filter(
             (product) => product.price >= minPrice
@@ -50,14 +48,12 @@ export async function GET(request) {
         );
     }
 
-    // Stock level
     if (maxStock !== null && !Number.isNaN(maxStock)) {
         filteredInventory = filteredInventory.filter(
             (product) => product.stockQuantity <= maxStock
         );
     }
 
-    // Sorting
     if (sort === "price-asc") {
         filteredInventory.sort((a, b) => a.price - b.price);
     }
@@ -77,11 +73,12 @@ export async function GET(request) {
     const total = filteredInventory.length;
     const totalPages = Math.ceil(total / limit);
 
-    const startIndex = (page - 1) * limit;
-    const products = filteredInventory.slice(
-        startIndex,
-        startIndex + limit
-    );
+    const products = exportData
+        ? filteredInventory
+        : filteredInventory.slice(
+            (page - 1) * limit,
+            (page - 1) * limit + limit
+        );
 
     return NextResponse.json({
         data: products,

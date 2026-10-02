@@ -38,8 +38,6 @@ export default function InventoryTable() {
   }, [minPrice, maxPrice]);
 
   useEffect(() => {
-    // The filtered result set always starts at its first page.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
   }, [
     debouncedSearch,
@@ -122,6 +120,94 @@ export default function InventoryTable() {
       Math.min(current + 1, pagination?.totalPages ?? current)
     );
   };
+
+  async function handleExport() {
+    try {
+      const params = new URLSearchParams();
+
+      if (debouncedSearch) {
+        params.set("search", debouncedSearch);
+      }
+
+      if (category) {
+        params.set("category", category);
+      }
+
+      if (stockLimit !== "") {
+        params.set("maxStock", stockLimit);
+      }
+
+      if (debouncedMinPrice !== "") {
+        params.set("minPrice", debouncedMinPrice);
+      }
+
+      if (debouncedMaxPrice !== "") {
+        params.set("maxPrice", debouncedMaxPrice);
+      }
+
+      if (sort) {
+        params.set("sort", sort);
+      }
+
+      params.set("export", "true");
+
+      const response = await fetch(`/api/inventory?${params.toString()}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to export inventory");
+      }
+
+      const result = await response.json();
+
+      const headers = [
+        "Product",
+        "SKU",
+        "Category",
+        "Price",
+        "Cost",
+        "Stock",
+        "Reorder Level",
+        "Last Updated",
+      ];
+
+      const rows = result.data.map((product) => [
+        product.productName,
+        product.sku,
+        product.category,
+        product.price,
+        product.cost,
+        product.stockQuantity,
+        product.reorderLevel,
+        product.lastUpdated,
+      ]);
+
+      const csv = [headers, ...rows]
+        .map((row) =>
+          row
+            .map((value) => `"${String(value).replaceAll('"', '""')}"`)
+            .join(",")
+        )
+        .join("\n");
+
+      const blob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;",
+      });
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "aura-engine-inventory.csv";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("CSV export failed:", error);
+    }
+  }
 
   if (loading) {
     return (
@@ -259,6 +345,16 @@ export default function InventoryTable() {
               />
             </div>
           </div>
+        </div>
+
+        <div className="mt-4 flex justify-end">
+          <button
+            type="button"
+            onClick={handleExport}
+            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+          >
+            Export to CSV
+          </button>
         </div>
       </div>
 
